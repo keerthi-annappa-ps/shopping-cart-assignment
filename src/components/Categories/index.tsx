@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import Category from "../Category";
 
-export default function Categories() {
-  return (
+const Categories = ({ loading, data = [] }) => {
+  return loading ? (
+    <div>Loading...</div>
+  ) : data.length > 0 ? (
     <div>
-      Welcome to Categories !!
+      {data.map((item: any, index) => (
+        <div className="container-bottom-shadow" key={item.id}>
+          <Category item={item} index={index} />
+        </div>
+      ))}
     </div>
-  )
-}
+  ) : (
+    <></>
+  );
+};
+
+export default Categories;

@@ -19,6 +19,8 @@ import {
   GET_CART,
   GET_CART_SUCCESS,
   GET_CART_FAIL,
+  ADD_TO_CART,
+  REMOVE_ITEM_FORM_CART,
   SET_FILTER,
   CLEAR_FILTERS,
   SET_SORT_BY,
@@ -50,6 +52,9 @@ export const logoutSuccess = createAction(LOGOUT_SUCCESS);
 export const getCart = createAction(GET_CART);
 export const getCartSuccess = createAction(GET_CART_SUCCESS);
 export const getCartFail = createAction(GET_CART_FAIL);
+
+export const addToCart = createAction(ADD_TO_CART);
+export const removeItemFromCart = createAction(REMOVE_ITEM_FORM_CART);
 
 export const setFilter = createAction(
   SET_FILTER,

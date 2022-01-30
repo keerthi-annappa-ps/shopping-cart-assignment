@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Card, Row, Col, Button } from "antd";
-import Loader from "../Loader";
+import React, { useEffect } from "react";
+import { Button, Card, Col, Layout, Row } from "antd";
 import EllipsisText from "react-ellipsis-text";
+import { useParams, useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 import "./styles.scss";
 const { Content } = Layout;
 export interface Props {
@@ -9,28 +10,65 @@ export interface Props {
 }
 const Products = ({
   products,
+  cart,
   categories,
   productLoaded,
   getProducts,
   getCategories,
+  addToCart,
 }) => {
+  const { id: categoryId } = useParams();
+  let navigate = useNavigate();
   useEffect(() => {
-    getProducts();
+    categoryId && categoryId !== "all"
+      ? getProducts(categoryId)
+      : getProducts();
     getCategories();
-  }, []);
+  }, [categoryId]);
 
   if (!productLoaded) {
     return <Loader />;
   }
+  const handleChangeCategory = (id?: string) => {
+    if (id) {
+      let navigationUri = `/products/${id}`;
+      navigate(navigationUri);
+      getProducts(id);
+    } else {
+      let navigationUri = `/products/all`;
+      navigate(navigationUri);
+      getProducts(id);
+    }
+  };
+
   return (
     <Content className="container-wrapper">
       <Row className="product-page">
         <Col span={4} className="categories">
-          {categories.items.length ? (
-            categories.items.map((category) => {
+          <div
+            className={`clickable category p10 ml10 fontsize15 medium ${
+              categoryId === "all" ? "theme-col" : ""
+            }`}
+            onClick={() => handleChangeCategory()}
+            key={"All"}
+          >
+            All Categories
+          </div>
+          {categories.length ? (
+            categories.map((category, index) => {
+              const { id } = category;
               return (
                 <div
-                  className="category p10 ml10 fontsize15 medium"
+                  className={`clickable category p10 ml10 fontsize15 medium ${
+                    categoryId
+                      ? category.id == categoryId
+                        ? "theme-col"
+                        : ""
+                      : index == 0 && categoryId !== "all"
+                      ? "theme-col"
+                      : ""
+                  }`}
+                  onClick={() => handleChangeCategory(id)}
                   key={category.key}
                 >
                   {category.name}
@@ -68,7 +106,11 @@ const Products = ({
                         </Col>
                       </Row>
                       <Col span={24} className="card-action-btn absolute">
-                        <Button className="w100 white" type="text">
+                        <Button
+                          className="w100 white"
+                          type="text"
+                          onClick={() => addToCart(item)}
+                        >
                           Buy Now @ Rs.{item.price}
                         </Button>
                       </Col>

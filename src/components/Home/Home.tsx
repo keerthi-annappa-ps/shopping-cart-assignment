@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Card } from "antd";
-import { IUser } from "@typings/state/index";
+import { Carousel, Layout } from "antd";
+import React, { useEffect } from "react";
+import Categories from "../Categories";
 import Loader from "../Loader";
 import "./styles.scss";
 const { Content } = Layout;
@@ -9,32 +9,53 @@ export interface Props {
   // catalog: ICatalog;
 }
 
-const Home = ({ initCatalog, catalog, catalogLoaded }) => {
+const Home = ({
+  initCatalog,
+  getCategories,
+  catalog,
+  categories,
+  catalogLoaded,
+  categoriesLoaded,
+}) => {
   useEffect(() => {
     initCatalog();
+    getCategories();
   }, []);
 
   if (!catalogLoaded) {
     return <Loader />;
   }
+
+  const configs = {
+    dots: true,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+  };
+
   return (
     <Content className="container-wrapper">
-      <div className="banners m60">
-        {catalog.items.length ? (
-          catalog.items.map((item) => {
-            return (
-              <Card
-                key={item.id}
-                hoverable
-                className="mb20"
-                style={{ width: "100%" }}
-                cover={<img alt="example" src={item.bannerImageUrl} />}
-              ></Card>
-            );
-          })
-        ) : (
-          <h1 className="no-products">No offers found.</h1>
-        )}
+      <div className="banners-slider m60">
+        <Carousel {...configs}>
+          {catalog.items.length ? (
+            catalog.items.map((item) => {
+              return (
+                <div key={item.id} className="container-bottom-shadow slide">
+                  <img alt="example" src={item.bannerImageUrl} />
+                </div>
+              );
+            })
+          ) : (
+            <h1 className="no-products">No offers found.</h1>
+          )}
+        </Carousel>
+      </div>
+      <div className="categories m60">
+        <Categories loading={!categoriesLoaded} data={categories} />
       </div>
     </Content>
   );

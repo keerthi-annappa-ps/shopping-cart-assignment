@@ -1,13 +1,8 @@
-import { put, all, takeLatest } from "redux-saga/effects";
-import { fetchCategories } from "../api/categories";
-import { fetchProducts } from "../api/products";
-import {
-  GET_CATEGORIES,
-  GET_CATEGORIES_FAIL,
-  GET_PRODUCTS,
-  GET_PRODUCTS_FAIL,
-} from "../constants";
+import { all, put, takeLatest } from "redux-saga/effects";
 import * as actions from "../actions";
+import { fetchCategories } from "../api/categories";
+import { fetchProducts, fetchProductsById } from "../api/products";
+import { GET_CATEGORIES, GET_PRODUCTS } from "../constants";
 
 function* getCategories() {
   try {
@@ -15,17 +10,18 @@ function* getCategories() {
 
     yield put(actions.getCategoriesSuccess(categories.data));
   } catch (e) {
-    yield put(actions.getCartFail(GET_CATEGORIES_FAIL));
+    yield put(actions.getCategoriesFail());
   }
 }
 
-function* getProducts() {
+function* getProducts(actionPayload) {
   try {
-    const products = yield fetchProducts();
-
+    const products = actionPayload.payload
+      ? yield fetchProductsById(actionPayload.payload)
+      : yield fetchProducts();
     yield put(actions.getProductsSuccess(products.data));
   } catch (e) {
-    yield put(actions.getProductsFail(GET_PRODUCTS_FAIL));
+    yield put(actions.getProductsFail());
   }
 }
 

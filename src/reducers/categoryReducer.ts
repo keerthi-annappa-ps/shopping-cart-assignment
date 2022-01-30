@@ -11,7 +11,7 @@ const initState = {
   error: null,
 };
 
-const catalogReducer = (state = initState, action) => {
+const categoryReducer = (state = initState, action) => {
   switch (action.type) {
     case GET_CATEGORIES:
       return {
@@ -36,4 +36,4 @@ const catalogReducer = (state = initState, action) => {
   }
 };
 
-export default catalogReducer;
+export default categoryReducer;

@@ -1,11 +1,19 @@
+import React, { Suspense, useState } from "react";
 import { Menu, Row, Col } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Logo from "../../Assets/images/logo.png";
 import cartImg from "../../Assets/images/cart.svg";
+const CartModal = React.lazy(() => import("../modals/CartModal"));
 const AppLogo = <img className="logo-img" alt="App Logo" src={Logo} />;
 const CartImg = <img className="cart-icon" alt="Cart" src={cartImg} />;
 
-function AppHeader() {
+function AppHeader({ totalItems = 0 }) {
+  const [cartStatus, setCartVisibilityStatus] = useState(false);
+  const toggleCartModalVisibility = (status) => {
+    setCartVisibilityStatus(!status);
+  };
+  const totalCount = useSelector((state: any) => state.cart.count);
   return (
     <Row className="app-header shadow-btm flex">
       <Col span={6} className="logo">
@@ -25,7 +33,7 @@ function AppHeader() {
             </Link>
           </Menu.Item>
           <Menu.Item key="Products">
-            <Link to="/products" className="link medium">
+            <Link to="/products/all" className="link medium">
               Products
             </Link>
           </Menu.Item>
@@ -40,11 +48,21 @@ function AppHeader() {
             Register
           </Link>
         </Col>
-        <Col className="cart">
+        <Col
+          className="cart"
+          onClick={() => {
+            toggleCartModalVisibility(cartStatus);
+          }}
+        >
           {CartImg}
-          <span>0 Items</span>
+          <span>{totalItems} Items</span>
         </Col>
       </Col>
+      {cartStatus && (
+        <Suspense fallback={<div className="loader">Loading</div>}>
+          <CartModal toggleCartModalVisibility={toggleCartModalVisibility} />
+        </Suspense>
+      )}
     </Row>
   );
 }

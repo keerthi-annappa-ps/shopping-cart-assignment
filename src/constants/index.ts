@@ -27,6 +27,9 @@ export const GET_CART = "GET_CART";
 export const GET_CART_SUCCESS = "GET_CART_SUCCESS";
 export const GET_CART_FAIL = "GET_CART_FAIL";
 
+export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_ITEM_FORM_CART = "REMOVE_ITEM_FORM_CART";
+
 export const SET_FILTER = "SET_FILTER";
 export const CLEAR_FILTERS = "CLEAR_FILTERS";
 
