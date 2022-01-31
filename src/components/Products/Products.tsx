@@ -3,6 +3,7 @@ import { Button, Card, Col, Layout, Row } from "antd";
 import EllipsisText from "react-ellipsis-text";
 import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../Loader";
+import ProductCard from "../../components/cards/ProductCard";
 import "./styles.scss";
 const { Content } = Layout;
 export interface Props {
@@ -85,36 +86,7 @@ const Products = ({
               products.items.map((item) => {
                 return (
                   <Col key={item.id} span={6}>
-                    <Card
-                      hoverable
-                      title={
-                        <span className="bold fontsize16 p5">
-                          <EllipsisText text={item.name} length={50} />
-                        </span>
-                      }
-                      className="product-card"
-                    >
-                      <Row className="flex flexible">
-                        <Col span={24} className="card-img w50">
-                          <img alt="example" src={item.imageURL} />
-                        </Col>
-                        <Col
-                          span={24}
-                          className="card-description medium p5 w50"
-                        >
-                          <EllipsisText text={item.description} length={100} />
-                        </Col>
-                      </Row>
-                      <Col span={24} className="card-action-btn absolute">
-                        <Button
-                          className="w100 white"
-                          type="text"
-                          onClick={() => addToCart(item)}
-                        >
-                          Buy Now @ Rs.{item.price}
-                        </Button>
-                      </Col>
-                    </Card>
+                    <ProductCard data={item} addToCart={addToCart} />
                   </Col>
                 );
               })
